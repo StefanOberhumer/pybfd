@@ -48,11 +48,17 @@ class ListFormatAndArchitecturesInformationAction(BfdActionNoParam):
 
         print "%s %s (%s)" % (parser.prog, __version__, __description__)
 
+        print "Architectures:",
         for arch in self.bfd.architectures:
             print " %s" % arch,
+        print
 
+        print
+
+        print "Bfd Targets:",
         for target in self.bfd.targets:
-            print "  %s" % target
+            print " %s" % target,
+        print
 
 
 class BfdActionTarget(Action):
