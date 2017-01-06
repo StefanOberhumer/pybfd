@@ -55,6 +55,15 @@ class ListFormatAndArchitecturesInformationAction(BfdActionNoParam):
             print "  %s" % target
 
 
+class BfdActionTarget(Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        self.bfd = bfd.Bfd()
+        if values[0] not in self.bfd.targets:
+            raise Exception("Invalid bfd target '%s'" % values[0])
+        namespace.target = values[0]
+        self.bfd.close()
+
+
 class BfdActionWithFileParam(Action):
     """Base class for BFD actions invoked by the argument parser."""
 
@@ -64,7 +73,7 @@ class BfdActionWithFileParam(Action):
         for fd in values:
             try:
                 # Create a new BFD from the current file descriptor.
-                self.bfd = bfd.Bfd(fd)
+                self.bfd = bfd.Bfd(fd, namespace.target)
 
                 # Display current filename and corresponding architecture.
                 print "\n%s:     file format %s\n" % \
@@ -273,6 +282,12 @@ def init_parser():
         action=DumpArchieveHeadersAction,
         type=FileType("r"), nargs="+",
         help="Display archive header information")
+
+    group.add_argument("-b", "--target", # add "-b, --target" to support bfd targets
+        action=BfdActionTarget,
+        nargs="+",
+        default="default",
+        help="")
 
     group.add_argument("-f", "--file-headers",
         action=DumpFileHeadersAction,
