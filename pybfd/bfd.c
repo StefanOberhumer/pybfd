@@ -153,7 +153,7 @@ pybfd_openr(PyObject *self, PyObject *args) {
     const char* target;
 
     if (PyArg_ParseTuple(args, "ss", &filename, &target)) {
-        abfd = bfd_openr(filename, NULL);
+        abfd = bfd_openr(filename, target);
 
         if (!abfd) {
             // An error ocurred trying to open the file.
@@ -191,7 +191,7 @@ pybfd_fdopenr(PyObject *self, PyObject *args) {
     int fd;
 
     if (PyArg_ParseTuple(args, "ssi", &filename, &target, &fd)) {
-        abfd = bfd_fdopenr(filename, NULL, fd);
+        abfd = bfd_fdopenr(filename, target, fd);
 
         if (!abfd) {
             // An error ocurred trying to open the file.
